@@ -15,20 +15,17 @@ const ProfileForm = () => {
 
     const enteredNewPw = newPwInputRef.current.value;
 
-    fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDZl6Sxh_GTVY2dt1MJ5LbAiuemJun3uNY",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          idToken: authCtx.token,
-          password: enteredNewPw,
-          returnSecureToken: false,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    ).then((res) => {
+    fetch("https://identitytoolkit.googleapis.com/v1/accounts:update?key=", {
+      method: "POST",
+      body: JSON.stringify({
+        idToken: authCtx.token,
+        password: enteredNewPw,
+        returnSecureToken: false,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
       history.replace("/");
     });
   };
