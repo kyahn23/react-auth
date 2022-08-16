@@ -1,9 +1,12 @@
 import { useState, useRef, useContext } from "react";
+import { useHistory } from "react-router-dom";
+
 import AuthContext from "../../store/auth-context";
 
 import classes from "./AuthForm.module.css";
 
 const AuthForm = () => {
+  const history = useHistory();
   const emailInputRef = useRef();
   const pwInputRef = useRef();
 
@@ -27,10 +30,9 @@ const AuthForm = () => {
     let url;
     if (isLogin) {
       url =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[API_KEY]";
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=";
     } else {
-      url =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]";
+      url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=";
     }
 
     fetch(url, {
@@ -60,8 +62,11 @@ const AuthForm = () => {
         }
       })
       .then((data) => {
-        console.log(data);
-        authCtx.login(data.idToken);
+        const expirationTime = new Date(
+          new Date().getTime() + +data.expiresIn * 1000
+        );
+        authCtx.login(data.idToken, expirationTime.toISOString());
+        history.replace("/");
       })
       .catch((err) => {
         alert(err.message);
